@@ -21,6 +21,7 @@ function ResponsiveNavigation({ background, hoverBackground, linkColor, navLinks
                         key={ index }
                         onMouseEnter={ () => { setHoverIndex(index) } }
                         onMouseLeave={ () => { setHoverIndex(-1) } }
+                        onClick={ () => { setNavOpen(!navOpen) } }
                         style={{ background: hoverIndex === index ? (hoverBackground || '#999') : '' }}
                     >
                         <Link
