@@ -29,7 +29,7 @@ class Promosiklin extends REST_Controller {
         if (!$this->get('id')) { //query parameter, example, promo?id=1
             $this->response(NULL, 400);
         }
-        $promo = $this->pm->get_promo($this->get('promoId'));
+        $promo = $this->pm->get_promo($this->get('id'));
         if ($promo) {
             $this->response($promo, 200); // 200 being the HTTP response code
         } else {
@@ -47,7 +47,7 @@ class Promosiklin extends REST_Controller {
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $promos = $this->pm->getPromo_list();
+            $promos = $this->pm->promoAfter();
             if ($promos) {
                 $this->response($promos, 200);
             } else {
@@ -65,7 +65,7 @@ class Promosiklin extends REST_Controller {
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $promos = $this->pm->getPromo_list();
+            $promos = $this->pm->promoAfter();
             if ($promos) {
                 $this->response($promos, 200);
             } else {

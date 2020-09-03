@@ -5,7 +5,7 @@ class Promomodel extends CI_Model {
     
     function getPromo_list() {
         $this->db->order_by('promos_id', 'ASC');
-        return $this->db->get($this->promos_laundry);
+        return $this->db->get($this->promos_laundry)->result();
         // if ($query) {
         //     return $query->result();
         // }
@@ -14,7 +14,7 @@ class Promomodel extends CI_Model {
 
     function promoAfter(){
         $this->db->order_by('date','DESC');
-        return $this->db->get($this->promos_laundry);
+        return $this->db->get($this->promos_laundry)->result();
     }
 
     function get_promo($id) {

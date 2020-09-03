@@ -46,6 +46,7 @@ class Servicesiklin extends REST_Controller {
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
+            $Service = $this->sm->serviceAfter();
             if ($Service) {
                 $this->response($Service, 200);
             } else {
@@ -62,6 +63,7 @@ class Servicesiklin extends REST_Controller {
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
+            $Service = $this->sm->serviceAfter();
             if ($Service) {
                 $this->response($Service, 200);
             } else {

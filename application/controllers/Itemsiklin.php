@@ -48,7 +48,7 @@ class Itemsiklin extends REST_Controller {
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $items = $this->im->getItem_list();
+            $items = $this->im->itemAfter();
             if ($items) {
                 $this->response($items, 200);
             } else {
@@ -65,7 +65,7 @@ class Itemsiklin extends REST_Controller {
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $items = $this->im->getItem_list();
+            $items = $this->im->itemAfter();
             if ($items) {
                 $this->response($items, 200);
             } else {

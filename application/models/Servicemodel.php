@@ -5,7 +5,7 @@ class Servicemodel extends CI_Model {
     
     function getService_list() {
         $this->db->order_by('services_id', 'ASC');
-        return $this->db->get($this->services_laundry);
+        return $this->db->get($this->services_laundry)->result();
         // if ($query) {
         //     return $query->result();
         // }
@@ -14,7 +14,7 @@ class Servicemodel extends CI_Model {
 
     function serviceAfter(){
         $this->db->order_by('date', 'DESC');
-        return $this->db->get($this->services_laundry)
+        return $this->db->get($this->services_laundry)->result();
     }
     
     function get_service($id) {
