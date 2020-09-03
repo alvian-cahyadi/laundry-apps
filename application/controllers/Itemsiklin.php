@@ -28,10 +28,10 @@ class Itemsiklin extends REST_Controller {
     }
 
     function item_get() {
-        if (!$this->get('itemId')) { //query parameter, example, items?id=1
+        if (!$this->get('id')) { //query parameter, example, items?id=1
             $this->response(NULL, 400);
         }
-        $item = $this->im->get_item($this->get('itemId'));
+        $item = $this->im->get_item($this->get('id'));
         if ($item) {
             $this->response($item, 200); // 200 being the HTTP response code
         } else {
@@ -40,32 +40,42 @@ class Itemsiklin extends REST_Controller {
     }
 	
 	function add_item_post() {
-        $item_id      = $this->post('itemId');
-        $item_name    = $this->post('itemName');
-        $item_format   = $this->post('itemFormat');
+        $item_id      = $this->post('item_id');
+        $item_name    = $this->post('item_name');
+        $item_format   = $this->post('item_format');
         
         $result = $this->im->add_item($item_id, $item_name, $item_format);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $this->response(array('status' => 'success'));
+            $items = $this->im->getItem_list();
+            if ($items) {
+                $this->response($items, 200);
+            } else {
+                $this->response(array(), 200);
+            }
         }
     }
     function update_item_put() {
         $id             = $this->put('id');
-        $item_id        = $this->put('itemId');
-        $item_name      = $this->put('itemName');
-        $item_format    = $this->put('itemFormat');
+        $item_id        = $this->put('item_id');
+        $item_name      = $this->put('item_name');
+        $item_format    = $this->put('item_format');
         $result = $this->im->update_item($id, $item_id, $item_name, $item_format);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $this->response(array('status' => 'success'));
+            $items = $this->im->getItem_list();
+            if ($items) {
+                $this->response($items, 200);
+            } else {
+                $this->response(array(), 200);
+            }
         }
     }
 	
-	function delete_item_delete($item_id) { //path parameter, example, /delete/1
-        $result = $this->im->delete_item($item_id);
+	function delete_item_delete($id) { //path parameter, example, /delete/1
+        $result = $this->im->delete_item($id);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {

@@ -6,10 +6,8 @@ import './assets/scss/base.scss';
 import registerServiceWorker from './registerServiceWorker';
 
 ReactDOM.render(
-  <div className="mainScreen">
-    <div className="firstScreen">
-      <App />
-    </div>    
+  <div className="firstScreen">
+    <App />
   </div>,
   document.getElementById('root')
 );

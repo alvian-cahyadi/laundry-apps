@@ -4,14 +4,21 @@ class Promomodel extends CI_Model {
     private $promos_laundry = 'promos_laundry';
     
     function getPromo_list() {
-        $query = $this->db->get($this->promos_laundry);
-        if ($query) {
-            return $query->result();
-        }
-        return NULL;
+        $this->db->order_by('promos_id', 'ASC');
+        return $this->db->get($this->promos_laundry);
+        // if ($query) {
+        //     return $query->result();
+        // }
+        // return NULL;
     }
+
+    function promoAfter(){
+        $this->db->order_by('date','DESC');
+        return $this->db->get($this->promos_laundry);
+    }
+
     function get_promo($id) {
-        $query = $this->db->get_where($this->promos_laundry, array("promos_id" => $id));
+        $query = $this->db->get_where($this->promos_laundry, array("id" => $id));
         if ($query) {
             return $query->row();
         }
@@ -19,17 +26,17 @@ class Promomodel extends CI_Model {
     }
     
     function add_promo($promo_id, $promo_name, $promo_format, $promo_value) {
-        $data = array('promos_id' => $promo_id, 'promos_name' => $promo_name, 'promos_value' => $promo_value, 'promos_format' => $promo_format);
+        $data = array('promos_id' => $promo_id, 'promos_name' => $promo_name, 'promos_value' => $promo_value, 'promos_format' => $promo_format, 'date' => date("Y-m-d h:i:sa"));
         $this->db->insert($this->promos_laundry, $data);
     }
     function update_promo($id, $promo_id, $promo_name, $promo_format, $promo_value){
-        $data = array('promos_id' => $promo_id, 'promos_name' => $promo_name, 'promos_value' => $promo_value, 'promos_format' => $promo_format);
-        $this->db->where('promos_id', $id);
+        $data = array('promos_id' => $promo_id, 'promos_name' => $promo_name, 'promos_value' => $promo_value, 'promos_format' => $promo_format, 'date' => date("Y-m-d h:i:sa"));
+        $this->db->where('id', $id);
         $this->db->update($this->promos_laundry, $data);
     }
     
-    function delete_promo($promo_id) {
-        $this->db->where('promos_id', $promo_id);
+    function delete_promo($id) {
+        $this->db->where('id', $id);
         $this->db->delete($this->promos_laundry);
     }
 }

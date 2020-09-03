@@ -26,10 +26,10 @@ class Servicesiklin extends REST_Controller {
         }
     }
     function service_get() {
-        if (!$this->get('serviceId')) { //query parameter, example, Service?id=1
+        if (!$this->get('id')) { //query parameter, example, Service?id=1
             $this->response(NULL, 400);
         }
-        $service = $this->sm->get_service($this->get('serviceId'));
+        $service = $this->sm->get_service($this->get('id'));
         if ($service) {
             $this->response($service, 200); // 200 being the HTTP response code
         } else {
@@ -38,31 +38,40 @@ class Servicesiklin extends REST_Controller {
     }
 	
 	function add_service_post() {
-        $service_id      = $this->post('serviceId');
-        $service_name    = $this->post('serviceName');
-        $service_price   = $this->post('servicePrice');
+        $service_id      = $this->post('service_id');
+        $service_name    = $this->post('service_name');
+        $service_price   = $this->post('service_price');
         
         $result = $this->sm->add_service($service_id, $service_name, $service_price);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $this->response(array('status' => 'success'));
+            if ($Service) {
+                $this->response($Service, 200);
+            } else {
+                $this->response(array(), 200);
+            }
         }
     }
     function update_service_put() {
-        $service_id       = $this->put('serviceId');
-        $service_name     = $this->put('serviceName');
-        $service_price    = $this->put('servicePrice');
-        $result = $this->sm->update_service($service_id, $service_name, $service_price);
+        $id               = $this->put('id');
+        $service_id       = $this->put('service_id');
+        $service_name     = $this->put('service_name');
+        $service_price    = $this->put('service_price');
+        $result = $this->sm->update_service($id, $service_id, $service_name, $service_price);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $this->response(array('status' => 'success'));
+            if ($Service) {
+                $this->response($Service, 200);
+            } else {
+                $this->response(array(), 200);
+            }
         }
     }
 	
-	function delete_service_delete($service_id) { //path parameter, example, /delete/1
-        $result = $this->sm->delete_service($service_id);
+	function delete_service_delete($id) { //path parameter, example, /delete/1
+        $result = $this->sm->delete_service($id);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
