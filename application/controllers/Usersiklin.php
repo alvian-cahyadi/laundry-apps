@@ -9,105 +9,105 @@ class Usersiklin extends CI_Controller {
         $this->load->model('Usermodel', 'um');
     }
     
-    public function users_get() {
+    public function usersprofile() {
         header('Access-Control-Allow-Origin: *');
         $users = $this->um->getUsers_list();
         $this->output->set_content_type('application/json')->set_output(json_encode($users));
     }
 
-    public function user_get() {
+    public function userprofile_scc() {
         header('Access-Control-Allow-Origin: *'); 
 
-        $userid             = $this->input->post('id');
+        $userid             = $this->input->post('_id');
         $users              = $this->um->getUsers($userid);
         $userData           = array(
-            'idUser'            => $users['_id'],
-            'usernameUser'      => $users['username'],
-            'firstNameUser'     => $users['first_name'],
-            'lastNameUser'      => $users['last_name'],
-            'addressUser'       => $users['address'],
-            'cityUser'          => $users['city'],
-            'zipUser'           => $users['zip'],
-            'birthUser'         => $users['birth_of_date'],
-            'placeUser'         => $users['place_of_birth'],
-            'idnumberUser'      => $users['id_number'],
-            'maritalstatusUser' => $users['marital_status'],
-            'emailUser'         => $users['email'],
-            'phonenumberUser'   => $users['phone_number']
+            '_id'           => $users['_id'],
+            'username'      => $users['username'],
+            'first_name'    => $users['first_name'],
+            'last_name'     => $users['last_name'],
+            'address'       => $users['address'],
+            'city'          => $users['city'],
+            'zip'           => $users['zip'],
+            'birth_of_date' => $users['birth_of_date'],
+            'place_of_birth'=> $users['place_of_birth'],
+            'id_number'     => $users['id_number'],
+            'marital_status'=> $users['marital_status'],
+            'email'         => $users['email'],
+            'phone_number'  => $users['phone_number']
         );
         $this->output->set_content_type('application/json')->set_output(json_encode($userData));
     }
 
-    public function add_users() {
+    public function addprofile() {
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
         $formdata = json_decode(file_get_contents('php://input'), true);
         
         if(!empty($formdata)){        
-            $username       = $formdata['usernameUser'];
-            $firstn         = $formdata['firstNameUser'];
-            $lastn          = $formdata['lastNameUser'];
-            $addr           = $formdata['addressUser'];
-            $city           = $formdata['cityUser'];
-            $zip            = $formdata['zipUser'];
-            $bod            = $formdata['birthUser'];
-            $pob            = $formdata['placeUser'];
-            $id_number      = $formdata['idnumberUser'];
-            $maried         = $formdata['maritalstatusUser'];
-            $email          = $formdata['emailUser'];
-            $phone          = $formdata['phonenumberUser'];
+            $username       = $formdata['username'];
+            $firstn         = $formdata['first_name'];
+            $lastn          = $formdata['last_name'];
+            $addr           = $formdata['address'];
+            $city           = $formdata['city'];
+            $zip            = $formdata['zip'];
+            $bod            = $formdata['birth_of_date'];
+            $pob            = $formdata['place_of_birth'];
+            $id_number      = $formdata['id_number'];
+            $maried         = $formdata['marital_status'];
+            $email          = $formdata['email'];
+            $phone          = $formdata['phone_number'];
 
             $result         = $this->um->insertUsers($username, $firstn, $lastn, $addr, $city, $zip, $bod, $pob, $id_number, $maried, $email, $phone);
-
-            $response       = array('status' => 'success', 'message' => 'user added successfully');
+           
+            $response       = $this->um->usersAfter();
         } else {
-            $response       = array('status' => 'error');
+            $response       = array('status' => 'failed');
         }
 
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function update_user(){
+    public function updateprofile(){
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
         $formdata = json_decode(file_get_contents('php://input'), true);
         
         if(!empty($formdata)){ 
-            $id             = $formdata['idUser'];
-            $username       = $formdata['usernameUser'];
-            $firstn         = $formdata['firstNameUser'];
-            $lastn          = $formdata['lastNameUser'];
-            $addr           = $formdata['addressUser'];
-            $city           = $formdata['cityUser'];
-            $zip            = $formdata['zipUser'];
-            $bod            = $formdata['birthUser'];
-            $pob            = $formdata['placeUser'];
-            $id_number      = $formdata['idnumberUser'];
-            $maried         = $formdata['maritalstatusUser'];
-            $email          = $formdata['emailUser'];
-            $phone          = $formdata['phonenumberUser'];
+            $id             = $formdata['_id'];
+            $username       = $formdata['username'];
+            $firstn         = $formdata['first_name'];
+            $lastn          = $formdata['last_name'];
+            $addr           = $formdata['address'];
+            $city           = $formdata['city'];
+            $zip            = $formdata['zip'];
+            $bod            = $formdata['birth_of_date'];
+            $pob            = $formdata['place_of_birth'];
+            $id_number      = $formdata['id_number'];
+            $maried         = $formdata['marital_status'];
+            $email          = $formdata['email'];
+            $phone          = $formdata['phone_number'];
 
             $result = $this->um->updateUsers($id, $username, $firstn, $lastn, $addr, $city, $zip, $bod, $pob, $id_number, $maried, $email, $phone);
 
-            $response       = array('status' => 'success', 'message' => 'user updated successfully');
+            $response       = $this->um->usersAfter();
         } else {
-            $response       = array('status' => 'error');
+            $response       = array('status' => 'failed');
         }
 
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
     
-    public function delete_user($id){
+    public function deleteprofile($id){
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
-        $id     = $this->input->post('userId');
+        $id     = $this->input->post('_id');
 
         $result = $this->um->deleteUsers($id);
         $response    = array(
-            'message'   => 'Packet delete successfully'
+            'status' => 'success'
         );
 
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
@@ -120,35 +120,35 @@ class Usersiklin extends CI_Controller {
         $this->output->set_content_type('application/json')->set_output(json_encode($userlogin));
     }
 
-    public function userLogin_get(){
+    public function userLogin(){
         header('Access-Control-Allow-Origin: *');
 
         $id             = $this->input->post('usernameUser');
         $userLogin      = $this->um->getLogin($id);
         $userloginData  = array(
-            'idUser'        => $userLogin->username,
-            'usernameUser'  => $userLogin->username,
-            'passwordUser'  => $userLogin->password,
-            'roleUser'      => $userLogin->role,
-            'isblockedUser' => $userLogin->isblocked
+            'id'        => $userLogin->id,
+            'username'  => $userLogin->username,
+            'password'  => $userLogin->password,
+            'role'      => $userLogin->role,
+            'isblocked' => $userLogin->isblocked
         );
         $this->output->set_content_type('application/json')->set_output(json_encode($userloginData));
     }
 
-    public function userLogin_add(){
+    public function addLogin(){
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
         $formdata = json_encode(file_get_contents('php://input'), true);
             
         if(!empty($formdata)){
-            $username   = $this->input->post('usernameUser');
-            $password   = $this->input->post('passwordUser');
-            $role       = $this->input->post('roleUser');
+            $username   = $this->input->post('username');
+            $password   = $this->input->post('password');
+            $role       = $this->input->post('role');
 
             $result     = $this->um->add_login($username, $password, $roles);
 
-            $response   = array('status' => 'success', 'message' => 'add data login successfully');
+            $response   = $this->um->loginAfter();
         } else {
             $response       = array('status' => 'error');
         }
@@ -156,21 +156,21 @@ class Usersiklin extends CI_Controller {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function userLogin_update(){
+    public function updateLogin(){
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
         $formdata = json_encode(file_get_contents('php://input'), true);
             
         if(!empty($formdata)){
-            $id         = $this->input->post('idUser');
-            $username   = $this->input->post('usernameUser');
-            $password   = $this->input->post('passwordUser');
-            $role       = $this->input->post('roleUser');
+            $id         = $this->input->post('id');
+            $username   = $this->input->post('username');
+            $password   = $this->input->post('password');
+            $role       = $this->input->post('role');
 
             $result     = $this->um->update_login($id, $username, $password, $roles);
 
-            $response   = array('status' => 'success', 'message' => 'add data login successfully');
+            $response   = $this->um->loginAfter();
         } else {
             $response       = array('status' => 'error');
         }
@@ -178,15 +178,15 @@ class Usersiklin extends CI_Controller {
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
     }
 
-    public function userLogin_delete(){
+    public function deleteLogin(){
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
 
-        $id     = $this->input->post('idUser');
+        $id     = $this->input->post('id');
 
         $result = $this->um->deleteUsers($id);
         $response    = array(
-            'message'   => 'Packet delete successfully'
+            'status' => 'success'
         );
 
         $this->output->set_content_type('application/json')->set_output(json_encode($response));

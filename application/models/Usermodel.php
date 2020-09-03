@@ -8,11 +8,17 @@ class Usermodel extends CI_Model {
     # get data from MongoDB use library for get connection
     # start of function of users profile
     public function getUsers_list(){
-        $query = $this->mongo_db->get($this->users_mongo);
-        if($query){
-            return $query;
-        }
-        return NULL;
+        $this->mongo_db->order_by(array('username' => 'ASC'));
+        return $this->mongo_db->get($this->users_mongo);
+        // if($query){
+        //     return $query;
+        // }
+        // return NULL;
+    }
+
+    public function usersAfter(){
+        $this->mongo_db->order_by(array('date' => 'DESC'));
+        return $this->mongo_db->get($this->users_mongo);
     }
     
     public function getUsers($id){
@@ -38,7 +44,7 @@ class Usermodel extends CI_Model {
             'email' => $email,
             'phone_number' => $phone
         );
-        $this->mongo_db->insert('users', $data);
+        $this->mongo_db->insert($this->users_mongo, $data);
     }
 
     public function updateUsers($id, $username, $firstn, $lastn, $addr, $city, $zip, $bod, $pob, $id_number, $maried, $email, $phone){
@@ -56,11 +62,11 @@ class Usermodel extends CI_Model {
             'email' => $email,
             'phone_number' => $phone
         );
-        $this->mongo_db->where(array('_id'=> new mongoId($id)))->set($data)->update('users');
+        $this->mongo_db->where(array('_id'=> new mongoId($id)))->set($data)->update($this->users_mongo);
     }
 
     public function deleteUsers($id){
-        $this->mongo_db->where(array('_id'=> new mongoId($id)))->delete('users');
+        $this->mongo_db->where(array('_id'=> new mongoId($id)))->delete($this->users_mongo);
     }
 
     # end of function of users profile
@@ -70,6 +76,11 @@ class Usermodel extends CI_Model {
     public function getLogin_list(){
         $query = $this->db->get($this->user_laundry);
         return $query->result();
+    }
+
+    public function loginAfter(){
+        $this->db->order_by('date', 'DESC');
+        return $this->db->get($this->user_laundry)->result();
     }
 
     public function getLogin($id){

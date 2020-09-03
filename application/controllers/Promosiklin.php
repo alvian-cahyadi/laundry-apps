@@ -26,10 +26,10 @@ class Promosiklin extends REST_Controller {
         }
     }
     function promo_get() {
-        if (!$this->get('promoId')) { //query parameter, example, promo?id=1
+        if (!$this->get('id')) { //query parameter, example, promo?id=1
             $this->response(NULL, 400);
         }
-        $promo = $this->pm->get_promo($this->get('promoId'));
+        $promo = $this->pm->get_promo($this->get('id'));
         if ($promo) {
             $this->response($promo, 200); // 200 being the HTTP response code
         } else {
@@ -38,34 +38,44 @@ class Promosiklin extends REST_Controller {
     }
 	
 	function add_promo_post() {
-        $promo_id      = $this->post('promoId');
-        $promo_name    = $this->post('promoName');
-        $promo_format  = $this->post('promoFormat');
-        $promo_value   = $this->post('promoValue');
+        $promo_id      = $this->post('promo_id');
+        $promo_name    = $this->post('promo_name');
+        $promo_format  = $this->post('promo_format');
+        $promo_value   = $this->post('promo_value');
         
         $result = $this->pm->add_promo($promo_id, $promo_name, $promo_format, $promo_value);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $this->response(array('status' => 'success'));
+            $promos = $this->pm->promoAfter();
+            if ($promos) {
+                $this->response($promos, 200);
+            } else {
+                $this->response(array(), 200);
+            }
         }
     }
     function update_promo_put() {
         $id             = $this->put('id');
-        $promo_id       = $this->put('promoId');
-        $promo_name     = $this->put('promoName');
-        $promo_format   = $this->put('promoFormat');
-        $promo_value    = $this->put('promoPrice');
+        $promo_id       = $this->put('promo_id');
+        $promo_name     = $this->put('promo_name');
+        $promo_format   = $this->put('promo_format');
+        $promo_value    = $this->put('promo_value');
         $result = $this->pm->update_promo($id, $promo_id, $promo_name, $promo_format, $promo_value);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
-            $this->response(array('status' => 'success'));
+            $promos = $this->pm->promoAfter();
+            if ($promos) {
+                $this->response($promos, 200);
+            } else {
+                $this->response(array(), 200);
+            }
         }
     }
 	
-	function delete_promo_delete($promo_id) { //path parameter, example, /delete/1
-        $result = $this->pm->delete_promo($promo_id);
+	function delete_promo_delete($id) { //path parameter, example, /delete/1
+        $result = $this->pm->delete_promo($id);
         if ($result === FALSE) {
             $this->response(array('status' => 'failed'));
         } else {
